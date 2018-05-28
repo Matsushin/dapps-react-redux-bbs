@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import contract from 'truffle-contract'
-import {web3connect, fetchTodos, fetchPosts, fetchPost, addTodo, addPost, instantiateTodoContract, instantiatePostContract} from './actions';
+import {web3connect, fetchPosts, fetchPost, addPost, instantiatePostContract} from './actions';
 import moment from 'moment'
 import Moment from 'react-moment'
 
-import './css/pure-min.css'
 import './App.css'
 import '../node_modules/bulma/css/bulma.min.css'
 
@@ -14,14 +13,12 @@ class App extends Component {
     super(props)
 
     this.state = {
-      textarea: '',
       title: '',
       content: '',
       posts: []
     }
     this.onChange = this.onChange.bind(this)
     this.onTextAreaChange = this.onTextAreaChange.bind(this)
-    this.renderTodos.bind(this);
     this.renderPosts.bind(this);
     this.updatePosts.bind(this);
   }
@@ -31,9 +28,6 @@ class App extends Component {
     // See actions/index.js => web3connect for more info.
     window.addEventListener('load', () => {
       this.props.web3connect();
-      this.props.instantiateTodoContract().then(() => {
-        this.props.fetchTodos();
-      });
       this.props.instantiatePostContract().then(() => {
         this.updatePosts()
       });
@@ -46,19 +40,6 @@ class App extends Component {
 
   onTextAreaChange(event) {
     this.setState({ content: event.target.value })
-  }
-
-  handleTextAreaChange(event) {
-    this.setState({
-      textarea: event.target.value
-    });
-  }
-  renderTodos(todos) {
-    return todos.map((todo, i) => {
-      return (
-        <li key={i}>{todo}</li>
-      );
-    })
   }
 
   updatePosts() {
@@ -104,15 +85,12 @@ class App extends Component {
     )
   }
 
-  addTodo() {
-    this.props.addTodo(this.state.textarea);
-  }
-
   addPost() {
     this.props.addPost(this.state.title, this.state.content)
     const post = {
       "title": this.state.title,
-      "content": this.state.content
+      "content": this.state.content,
+      "mintedAt": moment().unix()
     }
     let posts = this.state.posts
     posts.unshift(post)
@@ -162,18 +140,6 @@ class App extends Component {
             {this.renderPosts(this.state.posts)}
           </div>
         </div>
-        <main className="container">
-          <div className="pure-g">
-            <div className="pure-u-1-1">
-              <h1>Todos</h1>
-              <textarea id="textarea" value={this.state.textarea} onChange={this.handleTextAreaChange.bind(this)} />
-              <button onClick={this.addTodo.bind(this)}>Add Todo</button>
-              <ul>
-                {this.renderTodos(this.props.todos)}
-              </ul>
-            </div>
-          </div>
-        </main>
       </div>
     );
   }
@@ -181,18 +147,14 @@ class App extends Component {
 
 const mapDispatchToProps = {
   web3connect,
-  instantiateTodoContract,
   instantiatePostContract,
-  fetchTodos,
   fetchPosts,
   fetchPost,
-  addTodo,
   addPost
 };
 
 const mapStateToProps = (state) => ({
   web3: state.web3,
-  todos: state.todos,
   postIds: state.postIds,
   post: state.post
 });

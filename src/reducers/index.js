@@ -1,26 +1,16 @@
-import { WEB3_CONNECTED, TODO_ADDED, POST_ADDED, TODOS_CONTRACT_INSTANTIATED, POST_CONTRACT_INSTANTIATED, TODOS_FETCHED, POSTS_FETCHED, POST_FETCHED, defaultState } from '../actions';
+import { WEB3_CONNECTED, POST_ADDED, POST_CONTRACT_INSTANTIATED, POSTS_FETCHED, POST_FETCHED, defaultState } from '../actions';
 
-const todos = (state = defaultState, action) => {
+const post = (state = defaultState, action) => {
   switch (action.type) {
   case WEB3_CONNECTED:
     return {
       ...state,
       web3: action.payload
     };
-  case TODOS_CONTRACT_INSTANTIATED:
-    return {
-      ...state,
-      todosContract: action.payload
-    };
   case POST_CONTRACT_INSTANTIATED:
     return {
       ...state,
       postContract: action.payload
-    };
-  case TODOS_FETCHED:
-    return {
-      ...state,
-      todos: action.payload
     };
   case POSTS_FETCHED:
     return {
@@ -31,14 +21,6 @@ const todos = (state = defaultState, action) => {
     return {
       ...state,
       post: action.payload
-    };
-  case TODO_ADDED:
-    return {
-      ...state,
-      todos: [
-        ...state.todos,
-        action.payload
-      ]
     };
   case POST_ADDED:
     return {
@@ -53,5 +35,4 @@ const todos = (state = defaultState, action) => {
   }
 };
 
-export default todos;
-//export default post;
+export default post;

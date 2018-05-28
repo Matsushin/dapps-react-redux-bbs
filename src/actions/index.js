@@ -1,22 +1,16 @@
 import Web3 from 'web3';
 import contract from 'truffle-contract';
-import TodosContract from '../..//build/contracts/Todos.json';
 import PostTokenContract from '../..//build/contracts/PostToken.json';
 export const WEB3_CONNECTED = 'WEB3_CONNECTED';
 export const WEB3_DISCONNECTED = 'WEB3_DISCONNECTED';
-export const TODOS_CONTRACT_INSTANTIATED = 'TODOS_CONTRACT_INSTANTIATED';
 export const POST_CONTRACT_INSTANTIATED = 'POST_CONTRACT_INSTANTIATED';
-export const TODOS_FETCHED = 'TODOS_FETCHED';
 export const POSTS_FETCHED = 'POSTS_FETCHED';
 export const POST_FETCHED = 'POST_FETCHED';
-export const TODO_ADDED = 'TODO_ADDED';
 export const POST_ADDED = 'POST_ADDED';
 
 export const defaultState = {
   web3: null,
-  todos: [],
-  postIds: [],
-  post: null
+  postIds: []
 };
 
 export function web3connect() {
@@ -39,19 +33,6 @@ export function web3connect() {
   };
 }
 
-export function instantiateTodoContract() {
-  return (dispatch, getState) => {
-    const web3 = getState().web3;
-    const todos = contract(TodosContract);
-    todos.setProvider(web3.currentProvider);
-    return todos.deployed().then((todosContract) => {
-      dispatch({
-        type: TODOS_CONTRACT_INSTANTIATED,
-        payload: todosContract
-      });
-    });
-  };
-}
 
 export function instantiatePostContract() {
   return (dispatch, getState) => {
@@ -62,20 +43,6 @@ export function instantiatePostContract() {
       dispatch({
         type: POST_CONTRACT_INSTANTIATED,
         payload: postContract
-      });
-    });
-  };
-}
-
-export function fetchTodos() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const web3 = state.web3;
-    const todosContract = state.todosContract;
-    todosContract.getTodos().then((todos) => {
-      dispatch({
-        type: TODOS_FETCHED,
-        payload: todos.map((todo) => web3.toAscii(todo))
       });
     });
   };
@@ -110,23 +77,6 @@ export function fetchPost(payload) {
       dispatch({
         type: POST_FETCHED,
         payload: post
-      });
-    });
-  };
-}
-
-export function addTodo(payload) {
-  return (dispatch, getState) => {
-    const web3 = getState().web3;
-    const todosContract = getState().todosContract;
-    web3.eth.getAccounts((err, accounts) => {
-      todosContract.addTodo(web3.fromAscii(payload), {
-        from: accounts[0]
-      }).then((results) => {
-        dispatch({
-          type: TODO_ADDED,
-          payload
-        });
       });
     });
   };
