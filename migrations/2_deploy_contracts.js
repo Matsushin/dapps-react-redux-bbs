@@ -3,5 +3,5 @@ const PostToken = artifacts.require("./PostToken.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(Todos);
-  deployer.deploy(PostToken);
+  deployer.deploy(PostToken, "PostToken", "PT");
 };

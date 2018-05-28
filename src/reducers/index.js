@@ -1,4 +1,4 @@
-import { WEB3_CONNECTED, TODO_ADDED, TODOS_CONTRACT_INSTANTIATED, TODOS_FETCHED, defaultState } from '../actions';
+import { WEB3_CONNECTED, TODO_ADDED, POST_ADDED, TODOS_CONTRACT_INSTANTIATED, POST_CONTRACT_INSTANTIATED, TODOS_FETCHED, POSTS_FETCHED, POST_FETCHED, defaultState } from '../actions';
 
 const todos = (state = defaultState, action) => {
   switch (action.type) {
@@ -12,10 +12,25 @@ const todos = (state = defaultState, action) => {
       ...state,
       todosContract: action.payload
     };
+  case POST_CONTRACT_INSTANTIATED:
+    return {
+      ...state,
+      postContract: action.payload
+    };
   case TODOS_FETCHED:
     return {
       ...state,
       todos: action.payload
+    };
+  case POSTS_FETCHED:
+    return {
+      ...state,
+      postIds: action.payload
+    };
+  case POST_FETCHED:
+    return {
+      ...state,
+      post: action.payload
     };
   case TODO_ADDED:
     return {
@@ -25,9 +40,18 @@ const todos = (state = defaultState, action) => {
         action.payload
       ]
     };
+  case POST_ADDED:
+    return {
+      ...state,
+      postIds: [
+        ...state.postIds,
+        action.payload
+      ]
+    };
   default:
     return state
   }
 };
 
 export default todos;
+//export default post;
