@@ -4,6 +4,7 @@ import contract from 'truffle-contract'
 import {web3connect, fetchPosts, fetchPost, addPost, instantiatePostContract} from './actions';
 import moment from 'moment'
 import Moment from 'react-moment'
+import List from './components/List'
 
 import './App.css'
 import '../node_modules/bulma/css/bulma.min.css'
@@ -137,7 +138,7 @@ class App extends Component {
         </div>
         <div className="section">
           <div className="container">
-            {this.renderPosts(this.state.posts)}
+            <List posts={this.state.posts} />
           </div>
         </div>
       </div>
